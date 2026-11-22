@@ -1,0 +1,676 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Pusula Çocuk Gündemi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
+<style>
+/* Layout: gazete masası — üstte pusula başlığı, solda günün haberi, sağda akış; her haber aynı iskelet (ne oldu / neden önemli / bize ne / kelime / soru) */
+:root{--paper:#D9F3F0;--surface:#FFFFFF;--ink:#0F2A2E;--muted:#4F6A6D;--line:#B9E0DC;--sun:#FFC93C;--sun-ink:#0F2A2E;--tr:#D6455D;--tr-soft:#FCE7EB;--world:#1F6FB2;--world-soft:#E2EEF8;--lead:#08858A;--lead-fg:#FFFFFF;--lead-accent:#FFD45C;--focus:#08858A;color-scheme:light;--f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;--f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;--s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.5rem;--s6:2rem;--s7:3rem;--r:14px}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:var(--s4);padding-block:var(--s3)}
+.logo{display:flex;align-items:center;gap:var(--s2);text-decoration:none}
+.logo svg{width:38px;height:38px;flex:none}
+.logo b{font-family:var(--f-display);font-weight:800;font-size:1.6rem;letter-spacing:-.02em}
+.logo small{display:block;font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.date{margin-left:auto;font-size:.85rem;color:var(--muted);text-align:right}
+nav{overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav ul{display:flex;gap:var(--s1);list-style:none;margin:0;padding:0 0 var(--s2);white-space:nowrap}
+nav a{display:block;text-decoration:none;padding:.4rem .85rem;border-radius:999px;font-weight:700;font-size:.95rem;color:var(--muted)}
+nav a:hover{color:var(--ink);background:var(--paper)}
+nav a[aria-current="page"]{background:var(--lead);color:var(--lead-fg)}
+
+main{padding-block:var(--s6) var(--s7)}
+.proto{font-size:.85rem;color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:.5rem .8rem;margin-bottom:var(--s5)}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .6rem;border-radius:999px}
+.chip.turkiye{background:var(--tr-soft);color:var(--tr)}
+.chip.dunya{background:var(--world-soft);color:var(--world)}
+.chip.konu{background:transparent;color:var(--muted);padding-inline:0}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2) var(--s3);font-size:.85rem;color:var(--muted)}
+
+/* home */
+.home{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:var(--s6);align-items:start}
+.lead{background:var(--lead);color:var(--lead-fg);border-radius:22px;padding:var(--s6);position:relative;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;gap:var(--s4)}
+.lead .rose{position:absolute;right:-60px;top:-60px;width:260px;height:260px;opacity:.13;pointer-events:none}
+.lead .eyebrow{font-family:var(--f-display);font-weight:700;color:var(--lead-accent);letter-spacing:.08em;text-transform:uppercase;font-size:.85rem}
+.lead h1{font-size:clamp(2rem,4.5vw,3.1rem);font-weight:800;letter-spacing:-.02em;max-width:18ch}
+.lead p{font-size:1.1rem;max-width:52ch;opacity:.92}
+.lead .go{align-self:flex-start;background:var(--lead-accent);color:#14213D;font-weight:700;padding:.55rem 1.1rem;border-radius:999px}
+.lead:hover .go{transform:translateX(3px)}
+.go{transition:transform .2s}
+.side h2,.sec-title{font-size:1.35rem;font-weight:800;margin-bottom:var(--s4);display:flex;align-items:baseline;gap:var(--s2)}
+.sec-title small{font-family:var(--f-body);font-weight:400;font-size:.9rem;color:var(--muted)}
+
+.feed{display:flex;flex-direction:column;gap:var(--s3)}
+.item{display:grid;grid-template-columns:6px minmax(0,1fr);gap:var(--s3);text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s4)}
+.item:hover{border-color:var(--muted)}
+.item .stripe{border-radius:6px}
+.item.turkiye .stripe{background:var(--tr)} .item.dunya .stripe{background:var(--world)}
+.item h3{font-size:1.12rem;font-weight:700;margin-block:.3rem .25rem}
+.item p{font-size:.95rem;color:var(--muted)}
+
+.row{margin-top:var(--s7)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--s4)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s5);text-decoration:none;display:flex;flex-direction:column;gap:var(--s2)}
+.card:hover{border-color:var(--muted)}
+.card h3{font-size:1.15rem;font-weight:700}
+.card p{color:var(--muted);font-size:.95rem}
+.card .count{margin-top:auto;font-size:.85rem;font-weight:700;color:var(--ink)}
+
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--s4)}
+.qbox{background:var(--sun);color:var(--sun-ink);border-radius:var(--r);padding:var(--s5);text-decoration:none;display:flex;flex-direction:column;gap:var(--s2)}
+.qbox h3{font-size:1.25rem;font-weight:800}
+.qbox.alt{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+
+/* article */
+.article{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:var(--s5)}
+.back{font-weight:700;text-decoration:none;color:var(--muted);font-size:.95rem}
+.back:hover{color:var(--ink)}
+.article h1{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;letter-spacing:-.015em}
+.article .ozet{font-size:1.2rem;color:var(--muted)}
+.block h2{font-size:1.25rem;font-weight:800;margin-bottom:var(--s2)}
+.block p+p{margin-top:var(--s3)}
+.box{border-radius:var(--r);padding:var(--s5)}
+.box.why{background:var(--surface);border:1px solid var(--line)}
+.box.us{background:var(--world-soft)}
+.box.us h2{color:var(--world)}
+.box.ask{background:var(--sun);color:var(--sun-ink)}
+.box.limit{background:var(--surface);border:2px dashed var(--lead)}
+.box.limit h2{color:var(--lead)}
+.words{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.word{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:.35rem .7rem;font-weight:700;text-decoration:none;font-size:.95rem}
+.word:hover{border-color:var(--ink)}
+.where{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s4);align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s4) var(--s5)}
+.where svg{width:64px;height:64px}
+.where b{font-family:var(--f-display);font-size:1.15rem}
+.where .nums{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.92rem}
+.src{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:var(--s3)}
+
+/* sözlük */
+.search{width:100%;max-width:420px;font:inherit;padding:.65rem .9rem;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);margin-bottom:var(--s5)}
+.terms{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--s3)}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s4) var(--s5)}
+.term h3{font-size:1.1rem;font-weight:800;margin-bottom:.2rem}
+.term p{font-size:.95rem}
+.term .rel{font-size:.82rem;color:var(--muted);margin-top:var(--s2)}
+.term:target{border-color:var(--sun);box-shadow:0 0 0 3px var(--sun)}
+
+/* sorular */
+.qa{display:flex;flex-direction:column;gap:var(--s3);max-width:760px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s4) var(--s5)}
+summary{cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:1.1rem;list-style:none;display:flex;gap:var(--s3);justify-content:space-between}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--muted)}
+details[open] summary::after{content:"−"}
+details .who{font-size:.85rem;color:var(--muted);margin-top:var(--s1)}
+details .ans{margin-top:var(--s3)}
+form{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s3);max-width:760px;margin-top:var(--s6)}
+label{font-weight:700;font-size:.95rem}
+input[type=text],select,textarea{font:inherit;width:100%;padding:.6rem .8rem;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+.two{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:var(--s3)}
+.check{display:flex;gap:var(--s2);align-items:flex-start;font-weight:400}
+.check input{margin-top:.35rem}
+.btn{align-self:flex-start;font:inherit;font-weight:700;border:0;border-radius:999px;padding:.6rem 1.3rem;background:var(--ink);color:var(--surface);cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.note{font-size:.92rem;padding:.6rem .8rem;border-radius:10px;background:var(--world-soft);color:var(--ink)}
+
+/* quiz */
+.quiz{max-width:640px;display:flex;flex-direction:column;gap:var(--s4)}
+.progress{display:flex;gap:6px}
+.progress i{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.progress i.ok{background:var(--world)} .progress i.no{background:var(--tr)} .progress i.now{background:var(--sun)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s3)}
+.qcard h2{font-size:1.35rem;font-weight:800}
+.opt{font:inherit;text-align:left;padding:.75rem 1rem;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;font-weight:700}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.right{border-color:var(--world);background:var(--world-soft)}
+.opt.wrong{border-color:var(--tr);background:var(--tr-soft)}
+.opt:disabled{cursor:default}
+.expl{font-size:.95rem;color:var(--muted)}
+.score{font-family:var(--f-display);font-size:3rem;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* ilkeler */
+.rules{max-width:760px;display:flex;flex-direction:column;gap:var(--s4);counter-reset:r}
+.rule{display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:var(--s3)}
+.rule::before{counter-increment:r;content:counter(r);font-family:var(--f-display);font-weight:800;font-size:1.3rem;width:2.4rem;height:2.4rem;border-radius:50%;background:var(--sun);color:var(--sun-ink);display:grid;place-items:center}
+.rule h3{font-size:1.1rem;font-weight:800;margin-bottom:.15rem}
+.rule p{color:var(--muted)}
+
+.intro{max-width:62ch;color:var(--muted);margin-bottom:var(--s5);font-size:1.05rem}
+.page-h{font-size:clamp(1.8rem,4vw,2.4rem);font-weight:800;margin-bottom:var(--s2)}
+
+footer{border-top:1px solid var(--line);background:var(--surface)}
+footer .wrap{padding-block:var(--s5);display:flex;flex-wrap:wrap;gap:var(--s3) var(--s6);font-size:.88rem;color:var(--muted)}
+footer b{color:var(--ink);font-family:var(--f-display)}
+
+/* kavram bağlantıları ve kart */
+.k{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;border-bottom:2px dotted var(--lead);text-align:inherit;line-height:inherit}
+.k:hover{background:var(--paper);border-bottom-style:solid}
+.word.k{border:1px solid var(--line);border-bottom:1px solid var(--line);font-weight:700}
+.word.k:hover{border-color:var(--lead);background:var(--surface)}
+#kart{position:fixed;z-index:20;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(400px,calc(100vw - 32px));max-height:min(78vh,640px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(15,42,46,.22);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s3)}
+#kart .top{display:flex;align-items:flex-start;gap:var(--s3)}
+#kart .tur{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lead)}
+#kart h2{font-size:1.45rem;font-weight:800}
+#kart .x{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:1.2rem;line-height:1;cursor:pointer}
+#kart dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.25rem var(--s4);margin:0;font-size:.95rem;background:var(--paper);border-radius:12px;padding:var(--s3) var(--s4)}
+#kart dt{color:var(--muted)} #kart dd{margin:0;font-weight:700}
+#kart .map{height:170px;border-radius:12px;background:var(--world-soft);overflow:hidden}
+#kart .rel{font-size:.9rem;color:var(--muted)}
+#kart .rel a{color:var(--ink)}
+#kart .more{font-size:.9rem;font-weight:700;color:var(--lead)}
+.jvm-container{position:relative;overflow:hidden;height:100%;width:100%;touch-action:none}
+.jvm-tooltip{display:none!important}
+/* arama */
+.find{margin-left:var(--s4);flex:0 1 260px;min-width:0}
+.find input{width:100%;font:inherit;font-size:.95rem;padding:.5rem .85rem;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.res h2{font-size:1.2rem;font-weight:800;margin:var(--s5) 0 var(--s3)}
+.hit{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--s4) var(--s5);text-align:left;font:inherit;color:inherit;width:100%;cursor:pointer;display:block}
+.hit:hover{border-color:var(--lead)}
+.hit b{font-family:var(--f-display);font-size:1.1rem}
+.hit small{display:block;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lead)}
+.hit span{display:block;color:var(--muted);font-size:.95rem}
+.term .tur{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lead)}
+.term button.k{border:0;font-family:var(--f-display);font-weight:800;font-size:1.1rem;text-align:left}
+.tip{font-size:.9rem;color:var(--muted)}
+
+@media (max-width:820px){
+  .home{grid-template-columns:minmax(0,1fr)}
+  .lead{padding:var(--s5)}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .date{display:none}
+  .find{margin-left:auto;flex-basis:170px}
+  #kart{right:0;left:0;bottom:0;width:100%;max-height:72vh;border-radius:18px 18px 0 0;padding-bottom:calc(var(--s5) + env(safe-area-inset-bottom,0px));padding-left:max(var(--s5),env(safe-area-inset-left,0px));padding-right:max(var(--s5),env(safe-area-inset-right,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo" href="#ana" aria-label="Pusula ana sayfa">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="var(--lead)"/><circle cx="20" cy="20" r="14" fill="none" stroke="var(--surface)" stroke-width="1.2" opacity=".5"/><path d="M20 5 L24 20 L20 35 L16 20 Z" fill="var(--surface)"/><path d="M20 5 L24 20 L16 20 Z" fill="var(--sun)"/><circle cx="20" cy="20" r="2.2" fill="var(--lead)"/></svg>
+        <span><b>Pusula</b><small>Dünyayı birlikte anlayalım</small></span>
+      </a>
+      <div class="date" id="today"></div>
+      <div class="find"><label for="q" style="position:absolute;left:-9999px">Pusula'da ara</label><input id="q" type="search" placeholder="Pusula'da ara" autocomplete="off"></div>
+    </div>
+    <nav aria-label="Bölümler"><ul id="nav"></ul></nav>
+  </div>
+</header>
+
+<main class="wrap" id="view" tabindex="-1"></main>
+<div id="kart" role="dialog" aria-modal="false" aria-labelledby="kart-h" hidden></div>
+
+<footer>
+  <div class="wrap">
+    <span><b>Pusula</b> · 8–12 yaş için haber</span>
+    <span><a href="#ilkeler">Yayın ilkelerimiz</a></span>
+  </div>
+</footer>
+
+<script>
+const IST = {lat:41.01, lon:28.98};
+
+const GUNCELLEME = "22 Kasım 2026";
+
+const NAV = [
+  ["ana","Ana sayfa"],["turkiye","Türkiye"],["dunya","Dünya"],["dosyalar","Dosyalar"],
+  ["sozluk","Sözlük"],["quiz","Haftanın Quizi"],["ilkeler","İlkelerimiz"]
+];
+
+const HABERLER = [
+ {"id": "cop31son", "bolum": "turkiye", "konu": "İklim", "sure": 3, "seviye": "10+", "dosya": "iklim", "tarih": "22 Kasım 2026", "yer": {"ad": "Antalya, Türkiye", "lat": 36.89, "lon": 30.71}, "baslik": "Antalya'daki iklim zirvesi anlaşma olmadan bitti", "ozet": "Yaklaşık 200 ülkenin katıldığı COP31, planlanandan iki gün uzun sürdü. Ama ülkeler ortak bir metinde uzlaşamadı.", "neOldu": ["Birleşmiş Milletler İklim Zirvesi COP31, 9 Kasım'da Antalya'da başlamıştı ve 20 Kasım'da bitmesi planlanıyordu. Görüşmeler iki gün uzadı ve bugün sona erdi. Zirvenin sonunda herkesin onaylaması gereken ortak karar metni kabul edilmedi.", "Zirvenin başkanı Çevre, Şehircilik ve İklim Değişikliği Bakanı Murat Kurum, metin üzerinde uzlaşma olmadığı için kararların kabul edilmediğini açıkladı. En büyük anlaşmazlık kömür, petrol ve doğal gaz gibi fosil yakıtlar konusundaydı. Son taslakta bu yakıtların adı hiç geçmiyordu.", "BM zirvelerinde kararlar oy çokluğuyla değil, oybirliğine yakın bir uzlaşmayla alınıyor. Yani birkaç ülkenin itirazı bile bir metnin kabul edilmesini engelleyebiliyor."], "neden": "Ülkeler on yıl önce Paris'te Dünya'nın ısınmasını 1,5 derecede tutmaya çalışma sözü vermişti. BM Genel Sekreteri Antonio Guterres, dünyanın bu sınırı aşma yolunda olduğunu ve çok daha fazlasını yapmak gerektiğini söyledi.", "taraflar": "Avrupa Birliği, Panama ve Marshall Adaları gibi ülkeler, fosil yakıtlardan vazgeçilmesine dair açık bir ifade olmadan metni desteklemedi. Suudi Arabistan'ın da aralarında olduğu Arap ülkeleri ise havadaki karbonu yakalama gibi yöntemlerin metinde yer almasını savundu. Afrika ülkeleri, iklim değişikliğinden etkilenen ülkelere yapılacak para yardımının yetersiz kaldığını söyledi ama metni engellemedi.", "bizeNe": "Zirve Türkiye'de yapıldı ve Türkiye zirvenin başkanıydı. Türkiye de kuraklık, orman yangınları ve sıcak hava dalgaları gibi iklim değişikliğinin etkilerini yaşayan ülkelerden biri.", "kelimeler": ["cop", "iklim", "fosilyakit", "zirve", "ab"], "soru": "Bir sınıfta bir karar alınırken herkesin kabul etmesi mi gerekmeli, yoksa çoğunluğun kabul etmesi yeterli mi? Neden?", "kaynaklar": [["BM Haber, 22 Kasım 2026", "https://news.un.org/en/story/2026/11/1168855"], ["CBS News", "https://www.cbsnews.com/news/un-cop31-climate-conference-ends-no-agreement-fossil-fuel-debate-standstill/"], ["ABC News", "https://abcnews.com/Technology/climate-conference-ends-signature-agreement-countries-clash-fossil/story?id=138359179"]]},
+ {"id": "okul23", "bolum": "turkiye", "konu": "Okul", "sure": 2, "seviye": "8+", "dosya": null, "tarih": "22 Kasım 2026", "baslik": "Ara tatil bitti: Yarın okullar yeniden açılıyor", "ozet": "Dokuz günlük ara tatil sona erdi. Öğrenciler 23 Kasım Pazartesi yeniden derslere başlıyor.", "neOldu": ["Milli Eğitim Bakanlığı'nın takvimine göre birinci dönemin ara tatili 16-20 Kasım arasındaydı. Hafta sonlarıyla birlikte dokuz gün süren tatil bugün bitiyor, okullar yarın açılıyor.", "Birinci dönem 22 Ocak 2027 Cuma günü karnelerle sona erecek. Ardından 25 Ocak-5 Şubat arasında yarıyıl tatili var. İkinci dönemin ara tatili ise 8-12 Mart 2027'de."], "neden": "Tatil dönüşü ilk günler biraz zor gelebilir. Uyku saatini erkenden okul düzenine çekmek, pazartesi sabahını kolaylaştırır.", "kelimeler": ["meb", "aratatil"], "soru": "Ara tatilde yaptığın en güzel şey neydi? Bir sonraki tatil için ne planlarsın?", "kaynaklar": [["Milli Gazete: Okullar ne zaman açılıyor?", "https://www.milligazete.com.tr/kasim-ara-tatili-sonrasi-okullar-ne-zaman-aciliyor-23-kasimda-ders-var-mi-2026-2027-okul-takvimi-nedir"], ["Cumhuriyet: 2026-2027 okul takvimi", "https://www.cumhuriyet.com.tr/turkiye/kasim-ara-tatiline-kac-gun-kaldi-2026-2027-okullar-ne-zaman-kapanacak-2554244"]]},
+ {"id": "superay", "bolum": "turkiye", "konu": "Gökyüzü", "sure": 2, "seviye": "8+", "dosya": "uzay", "tarih": "22 Kasım 2026", "baslik": "Salı akşamı gökyüzünde süper ay var", "ozet": "24 Kasım Salı günü dolunay, Ay'ın Dünya'ya yakın olduğu zamana denk geliyor. Bu yüzden Ay her zamankinden biraz büyük ve parlak görünecek.", "neOldu": ["Ay, Dünya'nın etrafında tam bir daire çizerek değil, biraz yassı bir yolda dönüyor. Bu yüzden bazen bize daha yakın, bazen daha uzak oluyor. Dolunay, Ay'ın en yakın olduğu zamana denk gelince buna süper ay deniyor.", "Bu ayın dolunayı 24 Kasım Salı günü, Türkiye saatiyle yaklaşık 17.54'te tam haline ulaşacak. Ay doğduğu andan itibaren hava açıksa Türkiye'nin her yerinden çıplak gözle görülebilecek. Bu süper ay, art arda gelecek üç süper aydan ilki; sonrakiler aralık ve ocak aylarında."], "neden": "Süper ay, yılın en küçük görünen dolunayına göre yaklaşık yüzde 14 daha büyük ve yüzde 30 daha parlak görünebiliyor. İzlemek için hiçbir alete gerek yok.", "kelimeler": ["superay", "yorunge"], "soru": "Ay ufukta doğarken daha büyük görünür. Sence bu gerçekten mi büyük, yoksa gözümüz mü bizi yanıltıyor? Salı akşamı kendin dene!", "kaynaklar": [["Politikam: Kasım süper dolunayı", "https://www.politikam.com/kasim-super-dolunayi-24-kasimda-gorulecek-kunduz-dolunayi-turkiye-saatiyle-1754te-tam-evresine-ulasacak"], ["Yeni Asır: Kasım süper ayı", "https://www.yeniasir.com.tr/yasam/2026/11/17/gokyuzunde-gorsel-solen-yasanacak-kasim-super-dolunayi-icin-tarih-belli-oldu-kasim-super-ayi-hangi-gun-saat-kacta-gorulecek"], ["ScienceDaily: Kasım gökyüzü", "https://www.sciencedaily.com/releases/2026/11/261105224547.htm"]]},
+ {"id": "superlig12", "bolum": "turkiye", "konu": "Spor", "sure": 2, "seviye": "8+", "dosya": null, "tarih": "22 Kasım 2026", "yer": {"ad": "Başakşehir, İstanbul", "lat": 41.08, "lon": 28.81}, "baslik": "Süper Lig'de 12. hafta: Galatasaray'dan kulüp rekoru", "ozet": "Galatasaray, Samsunspor'u 2-1 yenerek ligde kendi sahasında üst üste 42. maçını kaybetmeden tamamladı. Bu, kulübün yeni rekoru.", "neOldu": ["Galatasaray dün İstanbul'daki Başakşehir Fatih Terim Stadı'nda Samsunspor'la oynadı. Galatasaray'ın gollerini Lucas Torreira ve Yunus Akgün attı, Samsunspor'un golünü Mohamed Bayo kaydetti. Maç 2-1 bitti.", "Bu sonuçla Galatasaray, ligde kendi sahasında oynadığı maçlarda üst üste 42 kez yenilmemiş oldu. Önceki rekor 41 maçtı. Haftanın bir diğer maçında Kocaelispor ile Fenerbahçe 2-2 berabere kaldı. Haftanın kalan maçları bugün ve yarın oynanıyor."], "neden": "Bir sezon boyunca evinde hiç yenilmemek bile zordur. Rekorlar, takımların uzun süre istikrarlı oynadığını gösteriyor.", "kelimeler": ["istanbul"], "soru": "Sence bir takımın kendi sahasında daha başarılı olmasının sebebi ne olabilir?", "kaynaklar": [["Hürriyet: Galatasaray 2-1 Samsunspor", "https://www.hurriyet.com.tr/sporarena/galatasaray-2-1-samsunspor-super-lig-maci-ozeti-43385826"], ["Fotomaç", "https://www.fotomac.com.tr/galatasaray/2026/11/21/galatasaraydan-samsunspor-karsisinda-tarihi-galibiyet"]]},
+ {"id": "voyager", "bolum": "dunya", "konu": "Uzay", "sure": 3, "seviye": "8+", "dosya": "uzay", "tarih": "22 Kasım 2026", "baslik": "Voyager 1 o kadar uzakta ki ışık bile ona bir günde ulaşıyor", "ozet": "1977'de fırlatılan Voyager 1 uzay aracı, 18 Kasım'da Dünya'dan bir ışık günü uzaklığa ulaştı. Bu kadar uzağa giden ilk insan yapımı araç.", "neOldu": ["Işık evrendeki en hızlı şey. Güneş'ten Dünya'ya yaklaşık 8 dakikada geliyor. Voyager 1'e ulaşması ise artık tam bir gün sürüyor. Araç Dünya'dan yaklaşık 25,9 milyar kilometre uzakta. Bu eşiği 18 Kasım'da, Türkiye saatiyle 13.16'da geçti.", "Voyager 1, 5 Eylül 1977'de fırlatıldı ve Jüpiter ile Satürn'ün yanından geçerek Güneş Sistemi'nin dışına çıktı. İçinde, uzaylılar bir gün bulursa diye Dünya'dan sesler, müzikler ve 55 dilde selamlar taşıyan altın kaplama bir plak var.", "Aracın enerjisi her yıl biraz azalıyor, bu yüzden aletlerinin çoğu kapatıldı. NASA'ya göre 14 Kasım'dan beri araçtan bilimsel veri gelmiyor, sadece sinyali alınıyor. Mühendisler sorunun nedenini araştırıyor."], "neden": "Voyager 1, insanların yaptığı en uzak nesne. Ondan gelen bilgiler, Güneş'in etkisinin bittiği ve yıldızlar arası boşluğun başladığı yeri anlamamızı sağladı.", "bizeNe": "Voyager 1 fırlatıldığında bugünkü büyükannelerimiz ve büyükbabalarımız gençti. Dünyanın her yerinden insanlar, Türkiye dahil, bu yolculuğu yaklaşık 50 yıldır izliyor.", "kelimeler": ["nasa", "isikgunu", "gunes"], "soru": "Uzaylılara gönderilecek bir plağa tek bir ses koyabilseydin, hangi sesi seçerdin?", "kaynaklar": [["NASA/ScienceDaily, 20 Kasım 2026", "https://www.sciencedaily.com/releases/2026/11/261120075554.htm"], ["EarthSky, 18 Kasım 2026", "https://earthsky.org/space/voyager-1-1-light-day-from-earth-november-17-18-2026/"], ["ABC7", "https://abc7news.com/story/voyager-1-nasa-probe-70s-reach-light-day-away-earth/20047626/"]]},
+ {"id": "hera", "bolum": "dunya", "konu": "Uzay", "sure": 3, "seviye": "10+", "dosya": "uzay", "tarih": "22 Kasım 2026", "baslik": "Avrupa'nın uzay aracı Hera, dört yıl önce çarpılan asteroide vardı", "ozet": "Avrupa Uzay Ajansı'nın Hera aracı, NASA'nın 2022'de bilerek çarptığı küçük asteroidi yakından incelemeye başladı.", "neOldu": ["Uzayda Didymos ve Dimorphos adında iki asteroit var. Büyük olan Didymos yaklaşık 780 metre, onun etrafında dönen küçük Dimorphos ise yaklaşık 151 metre genişliğinde. NASA, 26 Eylül 2022'de DART adlı bir aracı bilerek Dimorphos'a çarptırdı.", "Çarpışma, Dimorphos'un Didymos etrafındaki turunu yaklaşık 33 dakika kısalttı. Bu, beklenenden çok daha büyük bir değişiklikti. Kasım başında oraya ulaşan Hera, şimdi yaklaşık 25-30 kilometre uzaktan asteroitleri inceliyor ve en az altı ay orada kalacak.", "Hera'nın yanında ayakkabı kutusu büyüklüğünde iki küçük uydu var. Bilim insanları bunlardan birini asteroidin üzerine indirmeyi deneyebilir."], "neden": "Günün birinde Dünya'ya doğru gelen bir asteroit fark edilirse, onu yolundan saptırmak gerekebilir. Hera, bu yöntemin işe yarayıp yaramadığını anlamamıza yardım edecek.", "bizeNe": "Bu iki asteroit Dünya için bir tehlike oluşturmuyor. Ama gezegen savunması bütün ülkeleri ilgilendiriyor, Türkiye dahil.", "kelimeler": ["asteroit", "esa", "nasa", "yorunge"], "soru": "Sence bir asteroidin rotasını değiştirmek için çarpmak dışında başka ne yapılabilir?", "kaynaklar": [["DLR (Alman Havacılık ve Uzay Merkezi), 12 Kasım 2026", "https://www.dlr.de/en/latest/news/2026/hera-spots-its-target-a-first-glimpse-into-the-study-of-the-didymos-binary-asteroid-system"], ["AP, 11 Kasım 2026", "https://www.clickorlando.com/tech/2026/11/11/europes-hera-spacecraft-begins-close-inspections-of-an-asteroid-rammed-by-nasa-in-a-2022-test/"]]},
+ {"id": "aytugla", "bolum": "dunya", "konu": "Uzay", "sure": 2, "seviye": "8+", "dosya": "uzay", "tarih": "22 Kasım 2026", "yer": {"ad": "Fayetteville, Arkansas, ABD", "lat": 36.07, "lon": -94.17}, "baslik": "Ay tozundan LEGO gibi birbirine geçen tuğlalar yapıldı", "ozet": "ABD'de bir üniversite öğrencisi, Ay toprağının bir benzerini lazerle eriterek birbirine takılan küçük tuğlalar üretti.", "neOldu": ["Ay'da üs kurmak isteyen bilim insanlarının en büyük sorunlarından biri malzeme. Dünya'dan tuğla taşımak çok pahalı. Bu yüzden Ay'ın kendi tozunu kullanmanın yollarını arıyorlar.", "Arkansas Üniversitesi'nden Cole McCallum, öğrenciyken Ay toprağına benzeyen özel bir tozu lazerle katman katman eritip birleştirdi. Hiçbir yapıştırıcı kullanmadan, artı ve H şeklinde, birbirine geçen birkaç santimetrelik parçalar yaptı. Sonuçlar npj Advanced Manufacturing adlı dergide yayımlandı."], "neden": "Ay'daki malzemeyle orada bina yapabilmek, gelecekteki Ay üslerini çok daha kolay ve ucuz hale getirebilir.", "sinir": "Bu tuğlalar gerçek Ay tozuyla değil, ona benzeyen bir tozla yapıldı. Ayrıca henüz yük taşıyacak kadar sağlam değiller. Ay'daki düşük yer çekiminde ve havasız ortamda nasıl davranacakları da denenmedi.", "kelimeler": ["abd"], "soru": "Ay'da bir ev yapsaydın, en çok neye dikkat ederdin?", "kaynaklar": [["ScienceDaily (Arkansas Üniversitesi), 20 Kasım 2026", "https://www.sciencedaily.com/releases/2026/11/261119194525.htm"], ["Popular Science", "https://www.popsci.com/science/3d-printed-lunar-lego-bricks/"]]},
+ {"id": "nodul", "bolum": "dunya", "konu": "Doğa", "sure": 3, "seviye": "10+", "dosya": null, "tarih": "22 Kasım 2026", "yer": {"ad": "Clarion-Clipperton Bölgesi, Pasifik Okyanusu", "lat": 12.0, "lon": -130.0}, "baslik": "Okyanusun dibindeki tek bir taşta 245 hayvan yaşıyor", "ozet": "Bilim insanları, Pasifik Okyanusu'nun binlerce metre derinliğindeki metal yumrularının içinde gözle görülmeyecek kadar küçük hayvanlar buldu.", "neOldu": ["Pasifik Okyanusu'nun ortasında, Meksika ile Hawaii arasındaki bir bölgede, deniz tabanı patates büyüklüğünde taş yumrularla kaplı. Bu yumrular 4.000 metreden daha derinde ve oluşmaları milyonlarca yıl sürüyor.", "Almanya'daki Bremen Üniversitesi'ne bağlı MARUM'dan araştırmacılar 244 yumruyu inceledi ve içlerinde toplam 4.139 hayvan buldu. Bir yumrudan tam 245 hayvan çıktı. Bunlar çoğunlukla bir milimetreden küçük solucanlar ve minik kabuklular. Sonuçlar Scientific Reports dergisinde yayımlandı."], "neden": "Bu yumrular nikel, kobalt ve bakır gibi değerli metaller içerdiği için bazı şirketler onları çıkarmak istiyor. Araştırmacılar, yumrular toplanırsa bu küçük canlıların yaşam alanının bir daha geri gelmemek üzere yok olacağı uyarısında bulunuyor.", "sinir": "Araştırma okyanusun tek bir bölgesinden alınan örneklerle yapıldı. Başka bölgelerdeki yumrularda aynı canlıların yaşayıp yaşamadığı henüz bilinmiyor.", "bizeNe": "Telefonların ve elektrikli araçların pillerinde bu tür metaller kullanılıyor. Hepimizin kullandığı cihazlar, okyanusun dibindeki bu tartışmayla bağlantılı.", "kelimeler": ["derindeniz", "pasifik", "almanya"], "soru": "Değerli metallere ihtiyacımız var ama okyanus tabanındaki canlıları da korumak istiyoruz. Sence nasıl bir çözüm bulunabilir?", "kaynaklar": [["MARUM basın açıklaması, 11 Kasım 2026", "https://www.research-in-germany.org/idw-news/en_US/2026/11/2026-11-11_Hidden_Worlds_in_the_Deep_Ocean"], ["Gizmodo, 17 Kasım 2026", "https://gizmodo.com/deep-sea-miners-want-these-rocks-for-their-metals-scientists-found-them-teeming-with-life-2000841181"]]},
+ {"id": "balina", "bolum": "dunya", "konu": "Bilim", "sure": 2, "seviye": "8+", "dosya": null, "tarih": "22 Kasım 2026", "yer": {"ad": "Arequipa, Peru", "lat": -15.5, "lon": -74.7}, "baslik": "6 milyon yıl önce yaşamış balinanın yüzü bambaşka: Burun delikleri tek tarafta", "ozet": "Peru'da bulunan bir fosil, burun delikleri kafasının sol tarafına kaymış küçük bir balinaya ait. Bilim insanları bunun balinalarda bilinen en çarpık yüz olduğunu söylüyor.", "neOldu": ["Scaphokogia huachafo adı verilen bu balina yaklaşık 2,7 metre uzunluğundaydı ve 6 milyon yıl kadar önce yaşadı. Kafatası 1990'larda Peru'nun güneyinde bulunmuştu, ama ancak şimdi ayrıntılı olarak incelendi.", "Balinalar burun delikleriyle, yani başlarının üstündeki deliklerle nefes alır. Bu balinanın iki burun deliği de kafasının soluna kaymıştı ve biri diğerinden çok daha büyüktü. İsviçre'deki Zürih Üniversitesi'nin öncülük ettiği araştırma Communications Biology dergisinde yayımlandı."], "neden": "Bilim insanları, bu tuhaf yapının balinanın deniz tabanında yiyecek aramasına yardım etmiş olabileceğini düşünüyor. Fosiller, hayvanların çevrelerine nasıl uyum sağladığını gösteriyor.", "sinir": "Bu balinanın nasıl yaşadığına dair bilgiler tek bir kafatasından çıkarıldı. Balinanın deniz tabanında beslendiği fikri şimdilik güçlü bir tahmin, kesin bir bilgi değil.", "bizeNe": "Bugün Türkiye'nin denizlerinde de yunuslar ve bazen balinalar yaşıyor. Onların atalarının nasıl değiştiğini anlamak, bugünkü türleri korumamıza da yardım ediyor.", "kelimeler": ["fosil", "peru"], "soru": "Sence bir hayvanın yüzünün iki tarafının farklı olması ona ne gibi faydalar sağlayabilir?", "kaynaklar": [["Zürih Üniversitesi / EurekAlert, 9 Kasım 2026", "https://www.eurekalert.org/news-releases/1151087"], ["Sci.News", "https://www.sci.news/paleontology/scaphokogia-huachafo-15184.html"]]},
+ {"id": "varilgoz", "bolum": "dunya", "konu": "Doğa", "sure": 2, "seviye": "8+", "dosya": null, "tarih": "22 Kasım 2026", "yer": {"ad": "Monterey Kanyonu, Kaliforniya, ABD", "lat": 36.7, "lon": -122.1}, "baslik": "Kafası şeffaf balık ilk kez bu kadar net görüntülendi", "ozet": "ABD'de bir deniz araştırma robotu, kafasının içi görünen ve gözlerini kafasının içinde döndürebilen nadir bir balığı çok yüksek çözünürlükte kaydetti.", "neOldu": ["Varilgöz balığı adı verilen bu balık, ışığın çok az ulaştığı derinliklerde yaşıyor. Kafası cam gibi şeffaf. Yeşil renkli gözleri ise kafanın içinde ve yukarıya bakıyor.", "Monterey Körfezi Akvaryumu Araştırma Enstitüsü (MBARI), 20 Ekim'de Kaliforniya açıklarında yaklaşık 600 metre derinlikte bu balığı Doc Ricketts adlı uzaktan kumandalı robotuyla görüntüledi. Enstitü bu balığı yıllardır sadece 11 kez görebildi; 4K kalitesinde ilk kez çekti."], "neden": "Balık, yukarıdan geçen bir avın gölgesini görünce gözlerini kafasının içinde öne doğru çevirebiliyor. Bu görüntüler, derin denizde yaşayan canlıların zor koşullara nasıl uyum sağladığını gösteriyor.", "bizeNe": "Okyanusların derin kısımlarının çok azı keşfedildi. Bu tür keşifler, dünyanın bize hâlâ ne kadar çok sürpriz sakladığını hatırlatıyor.", "kelimeler": ["derindeniz", "abd"], "soru": "Kafan şeffaf olsaydı ve gözlerini içinde döndürebilseydin, nereye bakardın?", "kaynaklar": [["Popular Science", "https://www.popsci.com/environment/barreleye-fish-4k-video/"], ["FOX Weather", "https://www.foxweather.com/earth-space/rarely-seen-deep-sea-fish-barreleye-fish-california-video"], ["ScienceDaily, 17 Kasım 2026", "https://www.sciencedaily.com/releases/2026/11/261117033917.htm"]]},
+ {"id": "yesilarabistan", "bolum": "dunya", "konu": "Arkeoloji", "sure": 3, "seviye": "10+", "dosya": "iklim", "tarih": "22 Kasım 2026", "yer": {"ad": "Rub' al-Halî çölü, Suudi Arabistan", "lat": 20.0, "lon": 50.0}, "baslik": "Bugünkü çölde bir zamanlar göl ve su aygırları vardı", "ozet": "Suudi Arabistan'ın kum çölünde yapılan kazılar, 125 bin yıl önce burada büyük bir göl olduğunu ve çevresinde su aygırlarının yaşadığını gösterdi.", "neOldu": ["Arabistan Yarımadası'nın güneyindeki Rub' al-Halî, dünyanın en büyük kum çöllerinden biri. Ama bilim insanları, Uruq Aljelibah adlı bir yerde yaklaşık 125 bin yıl önce 340 kilometrekare büyüklüğünde ve 29 metreye kadar derinliğinde bir göl olduğunu buldu.", "Göl kıyısında su aygırı, yaban sığırı, devekuşu, ceylan ve oriks gibi hayvanların 500'den fazla fosili ve 5.500'den fazla taş alet bulundu. Çevrede palmiyeler ve sazlıklar vardı. Araştırma Science dergisinde 12 Kasım'da yayımlandı."], "neden": "Dünya'nın iklimi geçmişte de çok değişti. Bir zamanlar yeşil olan yerler çöle dönüşebiliyor. Bu da insanların ve hayvanların tarih boyunca neden göç ettiğini anlamamıza yardım ediyor.", "sinir": "Taş aletler kumun yüzeyinde bulundu ve yaşları doğrudan ölçülmedi. Bölgede insan kemiği bulunmadığı için bu aletleri tam olarak kimlerin yaptığı da kesin değil.", "bizeNe": "Anadolu'nun iklimi de geçmişte çok değişti. Konya Ovası'nın bir bölümü de çok eskiden büyük bir göldü.", "kelimeler": ["suudiarabistan", "arkeoloji", "fosil"], "soru": "Yaşadığın yer 125 bin yıl önce nasıl görünüyordu sence? Hangi hayvanlar yaşıyordu?", "kaynaklar": [["Live Science, 12 Kasım 2026", "https://www.livescience.com/archaeology/middle-east/125-000-year-old-poisoned-stone-points-discovered-on-shore-of-ancient-lake-in-saudi-arabia"], ["Smithsonian Magazine", "https://www.smithsonianmag.com/smart-news/ancient-humans-may-have-hunted-hippos-with-poisoned-spear-tips-on-the-arabian-peninsula-125000-years-ago-180989880/"]]}
+];
+
+/* Kavramlar: ülkeler, şehirler, kurumlar, kavramlar. "k" metinde aranan kalıplar (Türkçe ekleri otomatik yakalanır). */
+const KAVRAM = {
+  abd:{ad:"Amerika Birleşik Devletleri", tur:"Ülke", k:["Amerika Birleşik Devletleri","ABD"],
+    m:"Kısaca ABD. Kuzey Amerika kıtasında, 50 eyaletten oluşan bir ülke. Dünyanın en büyük ekonomisine sahip.",
+    b:[["Başkent","Washington"],["Nüfus","Yaklaşık 340 milyon"],["Dil","İngilizce"],["Para birimi","ABD doları"]], map:{r:"US",lat:38.9,lon:-77.04}},
+  turkiye:{ad:"Türkiye", tur:"Ülke", k:["Türkiye"],
+    m:"Toprakları hem Asya'da hem Avrupa'da olan bir ülke. Üç tarafı denizlerle çevrili.",
+    b:[["Başkent","Ankara"],["Nüfus","Yaklaşık 85 milyon"],["Dil","Türkçe"],["Para birimi","Türk lirası"],["İl sayısı","81"]], map:{r:"TR",lat:39.93,lon:32.86}},
+  avustralya:{ad:"Avustralya", tur:"Ülke", k:["Avustralya"],
+    m:"Hem bir ülke hem de bir kıta. Kanguru ve koala gibi başka hiçbir yerde yaşamayan hayvanlarıyla ünlü.",
+    b:[["Başkent","Kanberra"],["Nüfus","Yaklaşık 27 milyon"],["Dil","İngilizce"],["Para birimi","Avustralya doları"]], map:{r:"AU",lat:-35.28,lon:149.13}},
+  tuvalu:{ad:"Tuvalu", tur:"Ülke", k:["Tuvalu"],
+    m:"Pasifik Okyanusu'nda dokuz küçük adadan oluşan bir ülke. Dünyanın en küçük ülkelerinden biri.",
+    b:[["Başkent","Funafuti"],["Nüfus","Yaklaşık 11 bin"],["Dil","Tuvaluca, İngilizce"],["Para birimi","Avustralya doları"]], map:{lat:-8.52,lon:179.2}},
+  antalya:{ad:"Antalya", tur:"Şehir", k:["Antalya"],
+    m:"Türkiye'nin güneyinde, Akdeniz kıyısında bir şehir. Her yıl milyonlarca turist ağırlıyor.",
+    b:[["Ülke","Türkiye"],["Bölge","Akdeniz"]], map:{r:"TR",lat:36.89,lon:30.71}},
+  istanbul:{ad:"İstanbul", tur:"Şehir", k:["İstanbul"],
+    m:"Türkiye'nin en kalabalık şehri. Boğaz'ın iki yakasında kurulu, yani hem Avrupa'da hem Asya'da.",
+    b:[["Ülke","Türkiye"],["Nüfus","Yaklaşık 15,7 milyon"]], map:{r:"TR",lat:41.01,lon:28.98}},
+  dolmabahce:{ad:"Dolmabahçe Sarayı", tur:"Yer", k:["Dolmabahçe Sarayı"],
+    m:"İstanbul'da, Boğaz kıyısında 19. yüzyılda yapılmış bir Osmanlı sarayı. Atatürk son günlerini burada geçirdi. Bugün müze olarak geziliyor.",
+    b:[["Şehir","İstanbul"],["Yapılışı","1856"]], map:{r:"TR",lat:41.04,lon:29.0}},
+  pasifik:{ad:"Pasifik Okyanusu", tur:"Yer", k:["Pasifik Okyanusu","Pasifik"],
+    m:"Dünyanın en büyük ve en derin okyanusu. Bütün kıtalar bir araya gelse bile Pasifik'ten küçük kalır.",
+    b:[["Konum","Asya, Avustralya ve Amerika kıtaları arasında"]], map:{lat:-5,lon:-160}},
+  bm:{ad:"Birleşmiş Milletler", tur:"Kurum", k:["Birleşmiş Milletler","BM"],
+    m:"Dünya ülkelerinin bir araya geldiği en büyük kuruluş. 1945'te, savaşları önlemek ve ülkelerin birlikte çalışması için kuruldu.",
+    b:[["Kuruluş","1945"],["Üye ülke","193"],["Merkez","New York"]], map:{lat:40.75,lon:-73.97}},
+  cop:{ad:"COP", tur:"Kurum", k:["COP31","COP"],
+    m:"Birleşmiş Milletler'in her yıl yapılan iklim toplantısı. Adı İngilizce \"Taraflar Konferansı\" anlamına gelen sözcüklerin baş harflerinden geliyor. İlki 1995'te Berlin'de yapıldı.",
+    b:[["İlk toplantı","1995, Berlin"],["2026","COP31, Antalya"]]},
+  kongre:{ad:"Kongre", tur:"Kurum", k:["Kongre"],
+    m:"ABD'nin meclisi. Yasaları Kongre yapar. İki bölümü var: Temsilciler Meclisi ve Senato.",
+    b:[["Üye sayısı","535"],["Yeri","Washington"]], map:{r:"US",lat:38.89,lon:-77.01}},
+  temsilciler:{ad:"Temsilciler Meclisi", tur:"Kurum", k:["Temsilciler Meclis"],
+    m:"ABD Kongresi'nin büyük bölümü. Kalabalık eyaletler daha çok üyeyle temsil edilir. Üyelerin hepsi iki yılda bir yeniden seçilir.",
+    b:[["Üye sayısı","435"],["Görev süresi","2 yıl"]]},
+  senato:{ad:"Senato", tur:"Kurum", k:["Senato"],
+    m:"ABD Kongresi'nin küçük bölümü. Büyük ya da küçük, her eyaletten 2 senatör seçilir.",
+    b:[["Üye sayısı","100"],["Görev süresi","6 yıl"]]},
+  meclis:{ad:"Meclis", tur:"Kavram", k:["Meclis","meclis"],
+    m:"Halkın seçtiği milletvekillerinin toplandığı, yasaların yapıldığı yer. Türkiye'deki adı Türkiye Büyük Millet Meclisi, kısaca TBMM.",
+    b:[["Türkiye'de","TBMM, Ankara"],["Milletvekili","600"]]},
+  milletvekili:{ad:"Milletvekili", tur:"Kavram", k:["milletvekil","Milletvekil"],
+    m:"Seçimle Meclis'e giden ve halkı temsil eden kişi. Yasaları tartışır, oylar ve hükümeti denetler."},
+  tvf:{ad:"Türkiye Voleybol Federasyonu", tur:"Kurum", k:["Türkiye Voleybol Federasyonu"],
+    m:"Türkiye'de voleybolu düzenleyen kurum. Ligleri ve milli takımları yönetiyor, okullarda voleybolu yaygınlaştıracak programlar yürütüyor."},
+  federasyon:{ad:"Federasyon", tur:"Kavram", k:["federasyon"],
+    m:"Bir sporu bir ülkede düzenleyen kurum. Ligleri, milli takımları ve kuralları o belirler."},
+  ataturk:{ad:"Mustafa Kemal Atatürk", tur:"Kişi", k:["Mustafa Kemal Atatürk","Atatürk"],
+    m:"Türkiye Cumhuriyeti'nin kurucusu ve ilk cumhurbaşkanı. Kurtuluş Savaşı'nı yönetti, Cumhuriyet'i 1923'te ilan etti.",
+    b:[["Doğum","1881, Selanik"],["Ölüm","10 Kasım 1938, İstanbul"]]},
+  cumhuriyet:{ad:"Cumhuriyet", tur:"Kavram", k:["Cumhuriyet","cumhuriyet"], haric:/^[Cc]umhuriyetçi/,
+    m:"Ülkeyi yönetecek kişilerin halk tarafından seçildiği yönetim biçimi. Türkiye Cumhuriyeti 29 Ekim 1923'te ilan edildi."},
+  anma:{ad:"Anma", tur:"Kavram", k:["anma","Anma"], haric:/^[Aa]nma[kd]/,
+    m:"Önemli bir kişiyi ya da olayı unutmamak için birlikte hatırlamak."},
+  arasecim:{ad:"Ara seçim", tur:"Kavram", k:["ara seçim","Ara seçim"],
+    m:"ABD'de iki devlet başkanlığı seçiminin tam ortasında yapılan, Kongre üyelerinin seçildiği seçim."},
+  iklim:{ad:"İklim değişikliği", tur:"Kavram", k:["iklim değişikli","İklim değişikli"],
+    m:"Dünya'nın havasının uzun yıllar boyunca ısınması ve hava olaylarının değişmesi. En büyük nedeni kömür, petrol ve doğal gaz yakılması."},
+  seragazi:{ad:"Sera gazı", tur:"Kavram", k:["sera gaz","Sera gaz"],
+    m:"Dünya'nın etrafında bir battaniye gibi ısıyı tutan gazlar. Fazlası Dünya'yı aşırı ısıtır."},
+  zirve:{ad:"Zirve", tur:"Kavram", k:["zirve","Zirve"],
+    m:"Ülkelerin liderlerinin ya da temsilcilerinin önemli bir konuyu konuşmak için yaptığı büyük toplantı."},
+  meteor:{ad:"Meteor", tur:"Kavram", k:["meteor","Meteor"],
+    m:"Uzaydan gelip atmosferde yanan küçük taş ya da toz parçası. Halk arasında yıldız kayması denir."},
+  gezegen:{ad:"Gezegen", tur:"Kavram", k:["gezegen","Gezegen"],
+    m:"Bir yıldızın etrafında dönen büyük gök cismi. Güneş'in etrafında 8 gezegen dönüyor."},
+  superay:{ad:"Süper ay", tur:"Kavram", k:["süper ay","Süper ay"],
+    m:"Ay'ın Dünya'ya en yakın olduğu zamana denk gelen dolunay. Normalden biraz büyük ve parlak görünür."},
+  mars:{ad:"Mars", tur:"Gök cismi", k:["Mars"],
+    m:"Güneş'e en yakın dördüncü gezegen. Toprağındaki demir yüzünden kızıl görünür, bu yüzden Kızıl Gezegen de denir.",
+    b:[["Sıra","Güneş'ten 4."],["Uydu","2 küçük uydu"]]},
+  jupiter:{ad:"Jüpiter", tur:"Gök cismi", k:["Jüpiter"],
+    m:"Güneş Sistemi'nin en büyük gezegeni. İçine 1.300'den fazla Dünya sığar. Üzerindeki dev fırtına, Dünya'dan bile büyük.",
+    b:[["Sıra","Güneş'ten 5."],["Yapısı","Gaz devi"]]},
+  dunya:{ad:"Dünya", tur:"Gök cismi", k:["Dünya"],
+    m:"Yaşadığımız gezegen. Güneş'e en yakın üçüncü gezegen ve üzerinde yaşam olduğunu bildiğimiz tek yer.",
+    b:[["Sıra","Güneş'ten 3."],["Uydu","Ay"]]},
+  brezilya:{ad:"Brezilya", tur:"Ülke", k:["Brezilya"],
+    m:"Güney Amerika'nın en büyük ülkesi. Dünyanın en büyük yağmur ormanı Amazon'un büyük kısmı burada.",
+    b:[["Başkent","Brasília"],["Nüfus","Yaklaşık 210 milyon"],["Dil","Portekizce"],["Para birimi","Brezilya reali"]], map:{r:"BR",lat:-15.79,lon:-47.88}},
+  endonezya:{ad:"Endonezya", tur:"Ülke", k:["Endonezya"],
+    m:"Güneydoğu Asya'da, 17 binden fazla adadan oluşan dünyanın en büyük ada ülkesi.",
+    b:[["Başkent","Cakarta"],["Nüfus","Yaklaşık 280 milyon"],["Dil","Endonezce"],["Para birimi","Endonezya rupisi"]], map:{r:"ID",lat:-6.2,lon:106.85}},
+  sili:{ad:"Şili", tur:"Ülke", k:["Şili"],
+    m:"Güney Amerika'nın batı kıyısında, dünyanın en uzun ve en ince ülkesi. Çöllerindeki açık ve kuru hava sayesinde dünyanın en büyük teleskoplarının çoğu burada.",
+    b:[["Başkent","Santiago"],["Nüfus","Yaklaşık 20 milyon"],["Dil","İspanyolca"],["Para birimi","Şili pesosu"]], map:{r:"CL",lat:-30.24,lon:-70.74}},
+  nasa:{ad:"NASA", tur:"Kurum", k:["NASA"],
+    m:"ABD'nin uzay ajansı. Ay'a insan gönderen, Mars'a araç indiren ve uzaya teleskoplar yerleştiren kurum.",
+    b:[["Kuruluş","1958"],["Ülke","ABD"]]},
+  meb:{ad:"Milli Eğitim Bakanlığı", tur:"Kurum", k:["Milli Eğitim Bakanlığı","MEB"],
+    m:"Türkiye'deki okulları ve eğitimi yöneten bakanlık. Ders programlarını ve okul takvimini o belirliyor.",
+    b:[["Kısaltması","MEB"],["Merkez","Ankara"]]},
+  aratatil:{ad:"Ara tatil", tur:"Kavram", k:["ara tatil","Ara tatil"],
+    m:"Uzun dönemlerin ortasında öğrencilerin dinlenmesi için verilen kısa tatil. Türkiye'de yılda iki kez yapılıyor."},
+  dinozor:{ad:"Dinozor", tur:"Kavram", k:["dinozor","Dinozor"],
+    m:"Milyonlarca yıl boyunca Dünya'da yaşamış sürüngen grubu. Büyük çoğunluğunun soyu yaklaşık 66 milyon yıl önce tükendi. Bugünkü kuşlar dinozorların torunları sayılıyor."},
+  fosil:{ad:"Fosil", tur:"Kavram", k:["fosil","Fosil"],
+    m:"Çok uzun zaman önce yaşamış canlıların taşlaşmış kalıntıları ya da izleri. Kemikler, dişler, ayak izleri ve yapraklar fosilleşebilir."},
+  alyuvar:{ad:"Alyuvar", tur:"Kavram", k:["alyuvar","Alyuvar"],
+    m:"Kanımızda oksijeni vücudun her yerine taşıyan kırmızı hücreler. Kırmızı kan hücresi de denir."},
+  hemoglobin:{ad:"Hemoglobin", tur:"Kavram", k:["hemoglobin","Hemoglobin"],
+    m:"Alyuvarların içinde oksijene tutunup onu taşıyan madde. Kana kırmızı rengini o verir."},
+  teleskop:{ad:"Teleskop", tur:"Kavram", k:["teleskop","Teleskop"],
+    m:"Uzaktaki cisimleri daha yakın ve net görmemizi sağlayan alet. Bazıları yerde, bazıları uzayda çalışır."},
+  yorunge:{ad:"Yörünge", tur:"Kavram", k:["yörünge","Yörünge"],
+    m:"Bir cismin başka bir cismin etrafında dolaşırken izlediği yol. Ay, Dünya'nın; Dünya da Güneş'in yörüngesinde döner."},
+  galaksi:{ad:"Galaksi", tur:"Kavram", k:["galaksi","Galaksi"],
+    m:"Milyarlarca yıldızın, gazın ve tozun kütle çekimiyle bir arada durduğu dev yapı. Cüce galaksiler bunların küçük ve sönük olanları."},
+  samanyolu:{ad:"Samanyolu", tur:"Gök cismi", k:["Samanyolu"],
+    m:"İçinde yaşadığımız galaksi. Güneş, Samanyolu'ndaki yüz milyarlarca yıldızdan sadece biri.",
+    b:[["Türü","Sarmal galaksi"]]},
+  karanlikmadde:{ad:"Karanlık madde", tur:"Kavram", k:["karanlık madde","Karanlık madde"],
+    m:"Görünmeyen ama kütle çekimiyle etkisini gösteren gizemli madde. Evrendeki maddenin büyük kısmının bu olduğu düşünülüyor, ama ne olduğu hâlâ bilinmiyor."},
+  gunes:{ad:"Güneş", tur:"Gök cismi", k:["Güneş"],
+    m:"Bize en yakın yıldız. Dünya'ya ışık ve ısı veriyor. İçine bir milyondan fazla Dünya sığar."},
+  enflasyon:{ad:"Enflasyon", tur:"Kavram", k:["enflasyon","Enflasyon"],
+    m:"Fiyatların zamanla artması. Aynı parayla daha az şey alabilmek."},
+  fosilyakit:{"ad": "Fosil yakıt", "tur": "Kavram", "k": ["fosil yakıt", "Fosil yakıt"], "m": "Kömür, petrol ve doğal gaz gibi, milyonlarca yıl önce yaşamış canlıların kalıntılarından oluşan yakıtlar. Yakıldıklarında havayı ısıtan gazlar çıkar."},
+  ab:{"ad": "Avrupa Birliği", "tur": "Kurum", "k": ["Avrupa Birliği"], "m": "Avrupa'daki 27 ülkenin birlikte karar aldığı ve çoğunun aynı parayı, euroyu, kullandığı birlik. Türkiye üye olmak için uzun süredir aday.", "b": [["Üye ülke", "27"], ["Merkez", "Brüksel"]], "map": {"lat": 50.85, "lon": 4.35}},
+  isikgunu:{"ad": "Işık günü", "tur": "Kavram", "k": ["ışık günü", "Işık günü"], "m": "Işığın bir günde gidebildiği mesafe: yaklaşık 26 milyar kilometre. Uzaydaki çok büyük mesafeleri anlatmak için kullanılır."},
+  asteroit:{"ad": "Asteroit", "tur": "Kavram", "k": ["asteroit", "Asteroit"], "m": "Güneş'in etrafında dönen, kayadan ya da metalden oluşan gök cisimleri. Gezegenlerden çok daha küçüktürler."},
+  esa:{"ad": "Avrupa Uzay Ajansı", "tur": "Kurum", "k": ["Avrupa Uzay Ajansı", "ESA"], "m": "Avrupa ülkelerinin birlikte uzay araçları ve uydular geliştirdiği kurum. Kısaltması ESA.", "b": [["Kuruluş", "1975"], ["Merkez", "Paris"]], "map": {"r": "FR", "lat": 48.85, "lon": 2.35}},
+  peru:{"ad": "Peru", "tur": "Ülke", "k": ["Peru"], "m": "Güney Amerika'nın batısında, Pasifik Okyanusu kıyısında bir ülke. Eski İnka uygarlığının yurdu.", "b": [["Başkent", "Lima"], ["Nüfus", "Yaklaşık 34 milyon"], ["Dil", "İspanyolca"], ["Para birimi", "Sol"]], "map": {"r": "PE", "lat": -12.05, "lon": -77.04}},
+  suudiarabistan:{"ad": "Suudi Arabistan", "tur": "Ülke", "k": ["Suudi Arabistan"], "m": "Arabistan Yarımadası'nın büyük bölümünü kaplayan ülke. Topraklarının çoğu çöl.", "b": [["Başkent", "Riyad"], ["Nüfus", "Yaklaşık 35 milyon"], ["Dil", "Arapça"], ["Para birimi", "Suudi riyali"]], "map": {"r": "SA", "lat": 24.71, "lon": 46.68}},
+  almanya:{"ad": "Almanya", "tur": "Ülke", "k": ["Almanya"], "m": "Orta Avrupa'da bir ülke. Avrupa Birliği'nin en kalabalık ülkesi.", "b": [["Başkent", "Berlin"], ["Nüfus", "Yaklaşık 84 milyon"], ["Dil", "Almanca"], ["Para birimi", "Euro"]], "map": {"r": "DE", "lat": 52.52, "lon": 13.4}},
+  derindeniz:{"ad": "Derin deniz", "tur": "Kavram", "k": ["derin deniz", "Derin deniz", "derinlikte", "derinliklerde"], "m": "Okyanusların güneş ışığının ulaşmadığı ya da çok az ulaştığı derin bölümleri. Buradaki canlılar karanlığa, soğuğa ve büyük basınca uyum sağlamıştır."},
+  arkeoloji:{"ad": "Arkeoloji", "tur": "Kavram", "k": ["arkeolog", "Arkeolog"], "m": "Eski insanların bıraktığı aletleri, yapıları ve izleri inceleyerek geçmişi araştıran bilim dalı."}
+};
+
+const DOSYALAR = [
+  {id:"iklim", ad:"İklim değişikliği", acik:"Dünya neden ısınıyor, bunu durdurmak için ne yapılıyor?"},
+  {id:"deprem", ad:"Deprem ve hazırlık", acik:"Deprem neden olur, nasıl hazırlanırız? Türkiye'den ve dünyadan örnekler."},
+  {id:"meclis", ad:"Meclis ve demokrasi", acik:"Seçim, milletvekili, yasa. Ülke nasıl yönetiliyor?"},
+  {id:"para", ad:"Para ve enflasyon", acik:"Fiyatlar neden artar? Para nereden gelir?"},
+  {id:"uzay", ad:"Uzay ve gökyüzü", acik:"Gezegenler, galaksiler, teleskoplar ve gökyüzü olayları."},
+  {id:"yapayzeka", ad:"Yapay zekâ", acik:"Bilgisayarlar nasıl 'öğreniyor'? Hayatımızı nasıl değiştiriyor?"}
+];
+
+const QUIZ = [
+  {"s": "COP31 iklim zirvesi nasıl sona erdi?", "o": ["Bütün ülkeler yeni bir anlaşma imzaladı", "Ortak metin kabul edilmeden bitti", "Zirve iptal edildi", "Zirve bir yıl ertelendi"], "d": 1, "a": "Ülkeler özellikle fosil yakıtlar konusunda uzlaşamadı ve ortak karar metni kabul edilmedi."},
+  {"s": "Voyager 1'e ışığın ulaşması artık ne kadar sürüyor?", "o": ["8 dakika", "1 saat", "1 gün", "1 yıl"], "d": 2, "a": "Voyager 1, 18 Kasım'da Dünya'dan bir ışık günü uzaklığa ulaştı."},
+  {"s": "Okyanusun dibindeki tek bir yumrunun içinde kaç hayvan bulundu?", "o": ["5", "45", "245", "2.450"], "d": 2, "a": "Araştırmacılar incelediği 244 yumrudan birinde tam 245 minik hayvan buldu."},
+  {"s": "Salı akşamı gökyüzünde ne görülecek?", "o": ["Güneş tutulması", "Süper ay", "Kuyruklu yıldız", "Kuzey ışıkları"], "d": 1, "a": "24 Kasım'daki dolunay bir süper ay; Ay biraz daha büyük ve parlak görünecek."},
+  {"s": "Suudi Arabistan'daki çölde 125 bin yıl önce hangi hayvan yaşıyordu?", "o": ["Penguen", "Su aygırı", "Kutup ayısı", "Kanguru"], "d": 1, "a": "Bugün çöl olan yerde o zaman büyük bir göl vardı ve kıyısında su aygırları yaşıyordu."}
+];
+
+const ILKELER = [
+  ["Gerçeği anlatırız, korkutmayız","Zor konuları saklamayız ama detaylarla korkutmayız. Her zor haberin yanında, neler yapılabileceğini de anlatırız."],
+  ["Taraf tutmayız","Siyasi konularda kişileri değil konuları anlatırız. Farklı görüşleri eşit yer vererek aktarırız. Kendi yorumumuzu katmayız."],
+  ["Neyi yayınlamadığımızı biliriz","Cinsellik, istismar, intihar, ayrıntılı şiddet, küfür ve kumar haberlerini yayınlamayız."],
+  ["Her haberin en az iki kaynağı vardır","Haberleri birden fazla kaynaktan kontrol eder, kendi cümlelerimizle yazarız. Kaynaklarımızı her haberin altında gösteririz."],
+  ["Çocukları küçümsemeyiz","Basit anlatırız ama içeriği boşaltmayız. Zor kelimeleri sözlükte açıklarız."],
+  ["Çocukların bilgilerini koruruz","Hesap açtırmayız, takip etmeyiz."],
+  ["Hata yaparsak düzeltiriz","Yanlış bir bilgi fark edersek düzeltir ve neyi değiştirdiğimizi haberin altına yazarız."]
+];
+
+/* helpers */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const bolumAd = b => b === "turkiye" ? "Türkiye" : "Dünya";
+const chip = b => `<span class="chip ${b}">${bolumAd(b)}</span>`;
+const fmt = n => n.toLocaleString("tr-TR");
+
+function mesafe(a, b){
+  const R = 6371, r = x => x*Math.PI/180;
+  const dLat = r(b.lat-a.lat), dLon = r(b.lon-a.lon);
+  const h = Math.sin(dLat/2)**2 + Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function yon(a, b){
+  const r = x => x*Math.PI/180;
+  const y = Math.sin(r(b.lon-a.lon))*Math.cos(r(b.lat));
+  const x = Math.cos(r(a.lat))*Math.sin(r(b.lat)) - Math.sin(r(a.lat))*Math.cos(r(b.lat))*Math.cos(r(b.lon-a.lon));
+  return (Math.atan2(y,x)*180/Math.PI + 360) % 360;
+}
+
+/* metindeki kavramları bul ve bağla */
+const KALIP = [];
+for(const [id,c] of Object.entries(KAVRAM)) for(const k of c.k) KALIP.push({id,k,re:new RegExp("(?<![\\p{L}\\d])"+k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"[\\p{L}'’]*","gu")});
+KALIP.sort((a,b)=>b.k.length-a.k.length);
+function bul(text){
+  const hits=[];
+  for(const p of KALIP){ p.re.lastIndex=0; let m; while((m=p.re.exec(text))){ if(KAVRAM[p.id].haric && KAVRAM[p.id].haric.test(m[0])) continue; hits.push({i:m.index,j:m.index+m[0].length,id:p.id,len:p.k.length}); } }
+  hits.sort((a,b)=>a.i-b.i||b.len-a.len);
+  const out=[]; let end=-1; for(const h of hits){ if(h.i>=end){ out.push(h); end=h.j; } }
+  return out;
+}
+function bagla(text, used){
+  const hs=bul(text); let html="", pos=0;
+  for(const h of hs){
+    html+=esc(text.slice(pos,h.i));
+    const w=text.slice(h.i,h.j);
+    if(used && used.has(h.id)) html+=esc(w);
+    else { html+=`<button type="button" class="k" data-k="${h.id}" aria-haspopup="dialog">${esc(w)}</button>`; used&&used.add(h.id); }
+    pos=h.j;
+  }
+  return html+esc(text.slice(pos));
+}
+const metin = h => [h.baslik,h.ozet,...h.neOldu,h.neden,h.sinir||"",h.taraflar||"",h.bizeNe||""].join(" ");
+const IDX = {}; for(const h of HABERLER){ IDX[h.id]=new Set([...bul(metin(h)).map(x=>x.id), ...h.kelimeler]); }
+const gecen = id => HABERLER.filter(h=>IDX[h.id].has(id));
+const YONLER = ["kuzey","kuzeydoğu","doğu","güneydoğu","güney","güneybatı","batı","kuzeybatı"];
+
+function item(h){
+  return `<a class="item ${h.bolum}" href="#h-${h.id}"><span class="stripe" aria-hidden="true"></span><div>
+    <div class="meta">${chip(h.bolum)}<span>${esc(h.konu)}</span><span>${h.sure} dk</span></div>
+    <h3>${esc(h.baslik)}</h3><p>${esc(h.ozet)}</p></div></a>`;
+}
+
+/* views */
+function vAna(){
+  const lead = HABERLER[0];
+  const rest = HABERLER.filter(h => h !== lead);
+  return `<p class="proto">Haberler ${GUNCELLEME} gündeminden derlendi.</p>
+  <section class="home">
+    <a class="lead" href="#h-${lead.id}">
+      <svg class="rose" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2"/><path d="M50 4 L58 50 L50 96 L42 50Z M4 50 L50 42 L96 50 L50 58Z" fill="currentColor"/></svg>
+      <span class="eyebrow">Günün haberi · ${bolumAd(lead.bolum)}</span>
+      <h1>${esc(lead.baslik)}</h1>
+      <p>${esc(lead.ozet)}</p>
+      <span class="go">Haberi oku · ${lead.sure} dk</span>
+    </a>
+    <div class="side">
+      <h2>Son haberler</h2>
+      <div class="feed">${rest.slice(0,4).map(item).join("")}</div>
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="sec-title">Dosyalar <small>Uzun soluklu konular, her haberle büyüyor</small></h2>
+    <div class="grid3">${DOSYALAR.slice(0,3).map(dosyaKart).join("")}</div>
+  </section>
+  <section class="row strip">
+    <a class="qbox" href="#quiz"><span class="chip konu" style="color:inherit">Haftanın Quizi</span><h3>Bu haftanın haberlerini ne kadar takip ettin?</h3><p>${QUIZ.length} soru · ${Math.max(1,Math.round(QUIZ.length*0.4))} dakika</p></a>
+    <a class="qbox alt" href="#sozluk"><span class="chip konu">Sözlük</span><h3>Haberlerde geçen ${Object.keys(KAVRAM).length} kavram tek yerde</h3><p style="color:var(--muted)">Ülkeler, şehirler, kurumlar ve zor kelimeler. Her yeni haberle büyüyor.</p></a>
+  </section>`;
+}
+function dosyaKart(d){
+  const n = HABERLER.filter(h => h.dosya === d.id).length;
+  return `<a class="card" href="#d-${d.id}"><h3>${esc(d.ad)}</h3><p>${esc(d.acik)}</p><span class="count">${n ? n+" haber" : "Yakında"}</span></a>`;
+}
+function vBolum(b){
+  const list = HABERLER.filter(h => h.bolum === b);
+  const intro = b === "turkiye" ? "Türkiye'de olup bitenler, senin anlayacağın dille." : "Dünyanın dört bir yanından haberler. Her birinde bunun bizimle ilgisini de anlatıyoruz.";
+  return `<h1 class="page-h">${bolumAd(b)}</h1><p class="intro">${intro}</p><div class="feed" style="max-width:760px">${list.map(item).join("")}</div>`;
+}
+function vHaber(id){
+  const h = HABERLER.find(x => x.id === id);
+  if(!h) return vAna();
+  const used = new Set();
+  let where = "";
+  if(h.yer){
+    const km = Math.round(mesafe(IST, h.yer)/10)*10;
+    const deg = yon(IST, h.yer);
+    const ad = YONLER[Math.round(deg/45)%8];
+    const saat = km/850;
+    const sure = saat < 1.5 ? "yaklaşık 1 saat" : `yaklaşık ${Math.round(saat)} saat`;
+    where = `<div class="where"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="var(--world-soft)" stroke="var(--world)" stroke-width="2"/><g transform="rotate(${deg.toFixed(0)} 32 32)"><path d="M32 8 L37 32 L27 32Z" fill="var(--world)"/><path d="M32 56 L37 32 L27 32Z" fill="var(--line)"/></g><circle cx="32" cy="32" r="3" fill="var(--ink)"/></svg>
+      <div><b>${esc(h.yer.ad)}</b><div class="nums">İstanbul'un ${ad}sunda, ${fmt(km)} km uzakta. Uçakla ${sure}.</div></div></div>`;
+  }
+  return `<article class="article">
+    <a class="back" href="#${h.bolum}">← ${bolumAd(h.bolum)}</a>
+    <div class="meta">${chip(h.bolum)}<span>${esc(h.konu)}</span><span>${h.sure} dk okuma</span><span>Seviye ${h.seviye}</span></div>
+    <h1>${esc(h.baslik)}</h1>
+    <p class="ozet">${bagla(h.ozet,used)}</p>
+    ${where}
+    <p class="tip">Altı noktalı kelimelere dokun, ne olduklarını öğren.</p>
+    <section class="block"><h2>Ne oldu?</h2>${h.neOldu.map(p=>`<p>${bagla(p,used)}</p>`).join("")}</section>
+    <section class="box why block"><h2>Neden önemli?</h2><p>${bagla(h.neden,used)}</p></section>
+    ${h.sinir ? `<section class="box limit block"><h2>Bu araştırma neyi kanıtlamıyor?</h2><p>${bagla(h.sinir,used)}</p></section>` : ""}
+    ${h.taraflar ? `<section class="block"><h2>Kim ne diyor?</h2><p>${bagla(h.taraflar,used)}</p></section>` : ""}
+    ${h.bizeNe ? `<section class="box us block"><h2>Bunun bizimle ne ilgisi var?</h2><p>${bagla(h.bizeNe,used)}</p></section>` : ""}
+    <section class="block"><h2>Bu haberdeki kavramlar</h2><div class="words">${[...IDX[h.id]].map(k=>`<button type="button" class="word k" data-k="${k}">${esc(KAVRAM[k].ad)}</button>`).join("")}</div></section>
+    <section class="box ask block"><h2>Sen ne düşünüyorsun?</h2><p>${esc(h.soru)}</p></section>
+    <p class="src">${esc(h.tarih)} · Kaynaklar: ${h.kaynaklar.map(k=>`<a href="${esc(k[1])}" target="_blank" rel="noopener">${esc(k[0])}</a>`).join(", ")}. Bu haber kaynaklardan derlenip yapay zekâ yardımıyla yeniden yazıldı.</p>
+  </article>`;
+}
+function vDosyalar(){
+  return `<h1 class="page-h">Dosyalar</h1><p class="intro">Bazı konular tek bir haberle anlaşılmaz. Dosyalarda bir konuyla ilgili bütün haberleri, temel bilgileri ve sözlüğü bir arada bulursun.</p><div class="grid3">${DOSYALAR.map(dosyaKart).join("")}</div>`;
+}
+function vDosya(id){
+  const d = DOSYALAR.find(x => x.id === id); if(!d) return vDosyalar();
+  const list = HABERLER.filter(h => h.dosya === id);
+  return `<a class="back" href="#dosyalar">← Dosyalar</a><h1 class="page-h" style="margin-top:var(--s3)">${esc(d.ad)}</h1><p class="intro">${esc(d.acik)}</p>
+    ${list.length ? `<div class="feed" style="max-width:760px">${list.map(item).join("")}</div>` : `<p class="proto">Bu dosyaya ilk haber yakında eklenecek.</p>`}`;
+}
+function vSozluk(){
+  const keys = Object.keys(KAVRAM).sort((a,b)=>KAVRAM[a].ad.localeCompare(KAVRAM[b].ad,"tr"));
+  return `<h1 class="page-h">Sözlük</h1><p class="intro">Haberlerde geçen ülkeler, şehirler, kurumlar ve zor kelimeler. Her yeni haberle sözlüğümüz büyüyor.</p>
+  <label for="sozara" style="position:absolute;left:-9999px">Sözlükte ara</label>
+  <input id="sozara" class="search" type="search" placeholder="Sözlükte ara, örneğin Senato">
+  <div class="terms" id="terms">${keys.map(k=>{
+    const c=KAVRAM[k], r=gecen(k);
+    return `<div class="term" id="s-${k}" data-q="${esc((c.ad+" "+c.tur+" "+c.m).toLocaleLowerCase("tr"))}"><span class="tur">${esc(c.tur)}</span><h3><button type="button" class="k" data-k="${k}">${esc(c.ad)}</button></h3><p>${esc(c.m)}</p>${r.length?`<p class="rel">Geçtiği haber: ${r.map(h=>`<a href="#h-${h.id}">${esc(h.baslik)}</a>`).join(" · ")}</p>`:""}</div>`;
+  }).join("")}</div>`;
+}
+let aramaQ = "";
+function vAra(){
+  const q = aramaQ.trim().toLocaleLowerCase("tr");
+  if(!q) return `<h1 class="page-h">Pusula'da ara</h1><p class="intro">Bir ülke, şehir, kurum, kavram ya da haber ara. Örneğin "Kongre", "Antalya" ya da "meteor".</p>`;
+  const kv = Object.entries(KAVRAM).filter(([id,c])=>(c.ad+" "+c.k.join(" ")+" "+c.m).toLocaleLowerCase("tr").includes(q));
+  const hb = HABERLER.filter(h=>metin(h).toLocaleLowerCase("tr").includes(q));
+  return `<h1 class="page-h">"${esc(aramaQ.trim())}" için sonuçlar</h1>
+  <div class="res">
+  ${kv.length?`<h2>Sözlükte</h2><div class="feed" style="max-width:760px">${kv.map(([id,c])=>`<button type="button" class="hit k" data-k="${id}"><small>${esc(c.tur)}</small><b>${esc(c.ad)}</b><span>${esc(c.m)}</span></button>`).join("")}</div>`:""}
+  ${hb.length?`<h2>Haberlerde</h2><div class="feed" style="max-width:760px">${hb.map(item).join("")}</div>`:""}
+  ${!kv.length&&!hb.length?`<p class="intro">Bununla ilgili bir şey bulamadık. Başka bir kelime dene.</p>`:""}
+  </div>`;
+}
+let qi = 0, qres = [];
+function vQuiz(){
+  if(qi >= QUIZ.length){
+    const d = qres.filter(Boolean).length;
+    const msg = d === QUIZ.length ? "Haberleri çok iyi takip ediyorsun!" : d >= 3 ? "Güzel! Birkaç haberi kaçırmışsın, okumak ister misin?" : "Bu haftanın haberlerine göz atınca bir daha dene.";
+    return `<div class="quiz"><h1 class="page-h">Haftanın Quizi</h1>${bar()}<div class="qcard"><span class="score">${d}/${QUIZ.length}</span><p>${msg}</p><button class="btn" id="tekrar" type="button">Yeniden başla</button></div></div>`;
+  }
+  const q = QUIZ[qi];
+  return `<div class="quiz"><h1 class="page-h">Haftanın Quizi</h1>${bar()}
+    <div class="qcard"><span class="meta">Soru ${qi+1} / ${QUIZ.length}</span><h2>${esc(q.s)}</h2>
+    ${q.o.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join("")}
+    <p class="expl" id="expl" hidden></p><button class="btn" id="sonraki" type="button" hidden>${qi===QUIZ.length-1?"Sonucu gör":"Sonraki soru"}</button></div></div>`;
+}
+function bar(){ return `<div class="progress" aria-hidden="true">${QUIZ.map((_,i)=>`<i class="${i<qres.length?(qres[i]?"ok":"no"):(i===qi?"now":"")}"></i>`).join("")}</div>`; }
+function vIlkeler(){
+  return `<h1 class="page-h">Yayın ilkelerimiz</h1><p class="intro">Pusula'da her haber bu sözlere göre yazılır. Veliler ve öğretmenler neyi neden yaptığımızı buradan görebilir.</p>
+  <div class="rules">${ILKELER.map(r=>`<div class="rule"><div><h3>${esc(r[0])}</h3><p>${esc(r[1])}</p></div></div>`).join("")}</div>`;
+}
+
+/* router */
+function render(){
+  const hash = (location.hash || "#ana").slice(1);
+  let html, cur = hash;
+  if(hash.startsWith("h-")){ const h = HABERLER.find(x=>x.id===hash.slice(2)); html = vHaber(hash.slice(2)); cur = h ? h.bolum : "ana"; }
+  else if(hash.startsWith("d-")){ html = vDosya(hash.slice(2)); cur = "dosyalar"; }
+  else if(hash.startsWith("s-")){ html = vSozluk(); cur = "sozluk"; }
+  else if(hash==="ara"){ html = vAra(); cur = ""; }
+  else html = ({turkiye:()=>vBolum("turkiye"),dunya:()=>vBolum("dunya"),dosyalar:vDosyalar,sozluk:vSozluk,quiz:vQuiz,ilkeler:vIlkeler,ara:vAra}[hash] || vAna)();
+  kartKapat();
+  $("#view").innerHTML = html;
+  $("#nav").innerHTML = NAV.map(([k,v])=>`<li><a href="#${k}" ${k===cur?'aria-current="page"':""}>${v}</a></li>`).join("");
+  if(hash.startsWith("s-")){ const t = document.getElementById(hash); if(t){ t.scrollIntoView({block:"center"}); return; } }
+  window.scrollTo(0,0);
+}
+
+document.addEventListener("click", e => {
+  const o = e.target.closest(".opt");
+  if(o && !o.disabled){
+    const q = QUIZ[qi], i = +o.dataset.i, ok = i === q.d;
+    document.querySelectorAll(".opt").forEach((b,j)=>{ b.disabled = true; if(j===q.d) b.classList.add("right"); });
+    if(!ok) o.classList.add("wrong");
+    qres.push(ok);
+    const ex = $("#expl"); ex.textContent = (ok ? "Doğru! " : "Olmadı. ") + q.a; ex.hidden = false;
+    $("#sonraki").hidden = false; $("#sonraki").focus();
+    return;
+  }
+  if(e.target.id === "sonraki"){ qi++; render(); }
+  if(e.target.id === "tekrar"){ qi = 0; qres = []; render(); }
+});
+document.addEventListener("input", e => {
+  if(e.target.id === "sozara"){
+    const v = e.target.value.trim().toLocaleLowerCase("tr");
+    document.querySelectorAll(".term").forEach(t => t.hidden = v && !t.dataset.q.includes(v));
+  }
+});
+
+
+$("#today").textContent = new Date().toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+/* kavram kartı */
+let harita = null, sonOdak = null;
+function kartAc(id, from){
+  const c = KAVRAM[id]; if(!c) return;
+  sonOdak = from || document.activeElement;
+  const r = gecen(id);
+  const k = $("#kart");
+  k.innerHTML = `<div class="top"><div><span class="tur">${esc(c.tur)}</span><h2 id="kart-h">${esc(c.ad)}</h2></div><button type="button" class="x" aria-label="Kartı kapat">×</button></div>
+    <p>${esc(c.m)}</p>
+    ${c.b?`<dl>${c.b.map(([a,v])=>`<dt>${esc(a)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`:""}
+    ${c.map && window.jsVectorMap ? `<div class="map" id="harita" aria-label="${esc(c.ad)} haritada"></div>`:""}
+    ${r.length?`<p class="rel">Geçtiği haberler: ${r.map(h=>`<a href="#h-${h.id}">${esc(h.baslik)}</a>`).join(" · ")}</p>`:""}
+    <a class="more" href="#s-${id}">Sözlükte gör</a>`;
+  k.hidden = false;
+  if(harita){ try{ harita.destroy(); }catch(e){} harita = null; }
+  if(c.map && window.jsVectorMap){
+    try{
+      harita = new jsVectorMap({
+        selector:"#harita", map:"world", zoomButtons:false, zoomOnScroll:false, draggable:false, zoomOnScrollSpeed:0,
+        backgroundColor:"transparent",
+        regionStyle:{initial:{fill:"#B9E0DC",stroke:"#FFFFFF",strokeWidth:.4,fillOpacity:1},hover:{fillOpacity:1,cursor:"default"},selected:{fill:"#08858A"}},
+        selectedRegions: c.map.r ? [c.map.r] : [],
+        regionsSelectable:false,
+        markers:[{name:c.ad, coords:[c.map.lat,c.map.lon]}],
+        markerStyle:{initial:{fill:"#FFC93C",stroke:"#0F2A2E",strokeWidth:2,r:6},hover:{cursor:"default"}},
+        showTooltip:false
+      });
+    }catch(e){ const m=$("#harita"); if(m) m.remove(); }
+  }
+  k.querySelector(".x").focus();
+}
+function kartKapat(){
+  const k = $("#kart"); if(!k || k.hidden) return;
+  k.hidden = true;
+  if(harita){ try{ harita.destroy(); }catch(e){} harita = null; }
+  if(sonOdak && document.contains(sonOdak)) sonOdak.focus();
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest(".k");
+  if(t){ e.preventDefault(); kartAc(t.dataset.k, t); return; }
+  if(e.target.closest("#kart .x")){ kartKapat(); return; }
+  const k = $("#kart");
+  if(!k.hidden && !e.target.closest("#kart")) kartKapat();
+});
+document.addEventListener("keydown", e => { if(e.key === "Escape") kartKapat(); });
+$("#q").addEventListener("input", e => {
+  aramaQ = e.target.value;
+  if(location.hash !== "#ara") location.hash = "ara"; else $("#view").innerHTML = vAra();
+});
+
+window.addEventListener("hashchange", render);
+render();
+</script>
+
+</body></html>
